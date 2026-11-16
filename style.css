@@ -1,0 +1,788 @@
+/* =========================================================
+   Variables: every colour lives here, then is used below
+   ========================================================= */
+:root {
+  /* palette: white, gray, red, black */
+  --white: #ffffff;
+  --gray-50: #f6f6f7;
+  --gray-100: #ececef;
+  --gray-200: #dcdce1;
+  --gray-400: #9b9ba5;
+  --gray-600: #5a5a64;
+  --gray-800: #26262c;
+  --gray-900: #16161a;
+  --black: #0b0b0d;
+  --red: #e11d2e;
+  --red-dark: #b3121f;
+  --red-soft: rgba(225, 29, 46, 0.12);
+
+  /* light page */
+  --bg: var(--white);
+  --bg-alt: var(--gray-50);
+  --surface: var(--white);
+  --chip: var(--gray-100);
+  --text: var(--black);
+  --muted: var(--gray-600);
+  --border: var(--gray-200);
+  --accent: var(--red);
+  --accent-soft: var(--red-soft);
+  --glass: rgba(255, 255, 255, 0.78);
+  --shadow: 0 12px 32px rgba(11, 11, 13, 0.08);
+  --grid: rgba(11, 11, 13, 0.05);
+
+  /* dark page */
+  --bg-dark: var(--black);
+  --bg-alt-dark: var(--gray-900);
+  --surface-dark: var(--gray-900);
+  --chip-dark: var(--gray-800);
+  --text-dark: var(--white);
+  --muted-dark: var(--gray-400);
+  --border-dark: #2c2c33;
+  --glass-dark: rgba(22, 22, 26, 0.78);
+  --shadow-dark: 0 12px 32px rgba(0, 0, 0, 0.55);
+  --grid-dark: rgba(255, 255, 255, 0.05);
+
+  /* type and shape */
+  --font-head: "Space Grotesk", "Segoe UI", Arial, sans-serif;
+  --font-body: "Inter", "Segoe UI", Arial, sans-serif;
+  --radius: 20px;
+}
+
+/* =========================================================
+   Dark page: only the CSS changes the colours
+   ========================================================= */
+body.dark {
+  --bg: var(--bg-dark);
+  --bg-alt: var(--bg-alt-dark);
+  --surface: var(--surface-dark);
+  --chip: var(--chip-dark);
+  --text: var(--text-dark);
+  --muted: var(--muted-dark);
+  --border: var(--border-dark);
+  --glass: var(--glass-dark);
+  --shadow: var(--shadow-dark);
+  --grid: var(--grid-dark);
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* animated background: soft red glow + moving grid */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(620px circle at 12% 8%, var(--accent-soft), transparent 60%),
+    radial-gradient(520px circle at 92% 45%, var(--grid), transparent 60%),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: auto, auto, 46px 46px, 46px 46px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 90%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 90%);
+  animation: drift 24s ease-in-out infinite alternate;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-head);
+}
+
+/* scroll progress bar */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--gray-400));
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* =========================================================
+   Header
+   ========================================================= */
+header {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 20px 0;
+  animation: slideDown 0.9s ease both;
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: clamp(2.4rem, 8vw, 4.8rem);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  text-align: center;
+  background: linear-gradient(90deg, var(--text), var(--accent), var(--muted), var(--text));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s linear infinite;
+}
+
+.university {
+  margin: 0 0 28px;
+  text-align: center;
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+  animation: fadeUp 1s ease 0.4s both;
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 14px 12px 24px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: background-color 0.5s ease, border-color 0.5s ease;
+  animation: fadeUp 1s ease 0.6s both;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  color: var(--text);
+}
+.brand::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: dotPulse 2s ease-out infinite;
+}
+
+.brand-id {
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+}
+
+.links {
+  display: flex;
+  gap: 6px;
+}
+
+.links a {
+  padding: 8px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+.links a:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+.links a.active {
+  background: var(--accent);
+  color: var(--white);
+}
+
+/* =========================================================
+   Layout and section titles
+   ========================================================= */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section {
+  padding: 64px 0 10px;
+  scroll-margin-top: 20px;
+}
+
+.section-title {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 34px;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  letter-spacing: -0.5px;
+}
+.section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 0;
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--gray-400));
+  transition: width 1s ease 0.3s;
+}
+.section-title.visible::after {
+  width: 100%;
+}
+
+/* scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(44px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================
+   About
+   ========================================================= */
+.about-row {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  flex-wrap: wrap;
+}
+
+.photo-wrap {
+  position: relative;
+  width: 270px;
+  height: 270px;
+  flex-shrink: 0;
+}
+.photo-wrap.visible {
+  animation: floaty 5s ease-in-out infinite;
+}
+/* rotating ring around the photo */
+.photo-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent), var(--gray-400), var(--text), var(--accent));
+  animation: spin 6s linear infinite;
+}
+
+.photo-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--surface);
+  transition: background-color 0.5s ease;
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--chip);
+  transition: transform 0.6s ease;
+}
+.photo-wrap:hover .photo {
+  transform: scale(1.08) rotate(2deg);
+}
+
+/* floating skill badges */
+.badge {
+  position: absolute;
+  z-index: 2;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-family: var(--font-head);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+.badge-1 { top: 6%;     right: -16%; animation: bob 4s ease-in-out infinite; }
+.badge-2 { bottom: 14%; left: -18%;  animation: bob 4.6s ease-in-out 0.6s infinite; }
+.badge-3 { bottom: -2%; right: 4%;   animation: bob 3.8s ease-in-out 1.2s infinite;
+           color: var(--white); background: var(--accent); border-color: var(--accent); }
+
+.about-body {
+  flex: 1;
+  min-width: 260px;
+}
+
+.about-text {
+  margin: 0;
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.btn {
+  padding: 13px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.3s ease, background-color 0.3s ease,
+              color 0.3s ease, border-color 0.3s ease;
+}
+.btn:hover {
+  transform: translateY(-4px);
+}
+.btn-primary {
+  color: var(--white);
+  background: var(--accent);
+  border: 2px solid var(--accent);
+}
+.btn-primary:hover {
+  background: var(--red-dark);
+  border-color: var(--red-dark);
+  box-shadow: 0 10px 22px var(--accent-soft);
+}
+.btn-ghost {
+  color: var(--text);
+  background: transparent;
+  border: 2px solid var(--border);
+}
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* =========================================================
+   Cards (flex row with gap)
+   ========================================================= */
+.cards {
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+
+.card {
+  position: relative;
+  flex: 1 1 260px;
+  overflow: hidden;
+  padding: 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: opacity 0.9s ease, transform 0.4s ease, box-shadow 0.4s ease,
+              background-color 0.5s ease, border-color 0.5s ease;
+}
+.cards .card:nth-child(2) { transition-delay: 0.15s, 0s, 0s, 0s, 0s; }
+.cards .card:nth-child(3) { transition-delay: 0.3s, 0s, 0s, 0s, 0s; }
+
+/* glow that follows the mouse */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%), var(--accent-soft), transparent 70%);
+  transition: opacity 0.4s ease;
+}
+/* top line that grows on hover */
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--gray-400));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+.card.visible:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 22px 44px var(--accent-soft);
+}
+.card:hover::before {
+  opacity: 1;
+}
+.card:hover::after {
+  transform: scaleX(1);
+}
+
+.icon-box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  transition: transform 0.4s ease, background-color 0.3s ease, color 0.3s ease;
+}
+.icon-box svg {
+  width: 26px;
+  height: 26px;
+}
+.card:hover .icon-box {
+  transform: rotate(-8deg) scale(1.1);
+  background: var(--accent);
+  color: var(--white);
+}
+
+.card h3 {
+  position: relative;
+  margin: 20px 0 16px;
+  font-size: 1.4rem;
+}
+
+.card p {
+  position: relative;
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.chips {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chips li {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--chip);
+  border: 1px solid var(--border);
+  cursor: default;
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.chips li:hover {
+  transform: translateY(-4px);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+}
+/* chips pop in one by one when the card appears */
+.card.visible .chips li {
+  animation: chipIn 0.5s ease backwards;
+}
+.card.visible .chips li:nth-child(1) { animation-delay: 0.45s; }
+.card.visible .chips li:nth-child(2) { animation-delay: 0.6s; }
+.card.visible .chips li:nth-child(3) { animation-delay: 0.75s; }
+
+/* =========================================================
+   Form
+   ========================================================= */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 560px;
+  padding: 34px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: opacity 0.9s ease, transform 0.9s ease, background-color 0.5s ease, border-color 0.5s ease;
+}
+
+label {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+input {
+  padding: 14px 16px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease,
+              background-color 0.5s ease, color 0.5s ease;
+}
+input::placeholder {
+  color: var(--muted);
+}
+input:hover {
+  border-color: var(--gray-400);
+}
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+  transform: translateY(-2px);
+}
+
+.send {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 14px;
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+}
+.send svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+/* shine that sweeps across the button */
+.send::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: translateX(-160%);
+  animation: shine 3.5s ease-in-out infinite;
+}
+.send:hover {
+  background: var(--red-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 22px var(--accent-soft);
+}
+.send:hover svg {
+  transform: translateX(6px);
+}
+.send:active {
+  transform: scale(0.97);
+}
+
+.hello {
+  min-height: 1.6em;
+  margin: 6px 0 0;
+  font-weight: 600;
+  color: var(--accent);
+}
+.hello.show {
+  animation: pop 0.5s ease;
+}
+
+/* =========================================================
+   Theme button (fixed)
+   ========================================================= */
+.theme-btn {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--text);
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  animation: pulse 2.6s ease-in-out infinite;
+  transition: transform 0.25s ease, background-color 0.4s ease, color 0.4s ease;
+}
+.theme-btn svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.5s ease;
+}
+.theme-btn:hover {
+  transform: scale(1.07);
+}
+.theme-btn:hover svg {
+  transform: rotate(40deg);
+}
+.icon-sun { display: none; }
+body.dark .icon-sun { display: block; }
+body.dark .icon-moon { display: none; }
+
+/* =========================================================
+   Footer
+   ========================================================= */
+footer {
+  position: relative;
+  margin-top: 80px;
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--muted);
+  background: var(--bg-alt);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--gray-400), transparent);
+  background-size: 200% 100%;
+  animation: slide 4s linear infinite;
+}
+footer p {
+  margin: 0;
+}
+
+/* =========================================================
+   Keyframes
+   ========================================================= */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  to { background-position: 300% 0; }
+}
+@keyframes drift {
+  from { background-position: 0 0, 0 0, 0 0, 0 0; }
+  to   { background-position: 60px 40px, -50px 30px, 46px 46px, 46px 46px; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes floaty {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -14px; }
+}
+@keyframes bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -10px; }
+}
+@keyframes dotPulse {
+  0%   { box-shadow: 0 0 0 0 var(--accent-soft); }
+  70%  { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@keyframes chipIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes shine {
+  0%, 55% { transform: translateX(-160%); }
+  100%    { transform: translateX(360%); }
+}
+@keyframes slide {
+  to { background-position: 200% 0; }
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-soft); }
+  50%      { box-shadow: 0 0 0 12px transparent; }
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* =========================================================
+   Responsive and reduced motion
+   ========================================================= */
+@media (max-width: 700px) {
+  .bar {
+    justify-content: center;
+    border-radius: 24px;
+    padding: 14px;
+  }
+  .about-row {
+    justify-content: center;
+    text-align: center;
+    gap: 44px;
+  }
+  .actions {
+    justify-content: center;
+  }
+  .photo-wrap {
+    width: 230px;
+    height: 230px;
+  }
+  .badge-1 { right: -8%; }
+  .badge-2 { left: -8%; }
+  .section-title {
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
